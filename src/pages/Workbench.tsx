@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useAppContext } from '../context/AppContext';
 import { Button } from '../components/ui/button';
-import { ArrowLeft, Building, Briefcase, FileDigit, BarChart4, MoveRight, Layers, FileSpreadsheet, Download, PanelRight, X, PlusCircle, ShieldCheck, ChevronDown, Filter, Search } from 'lucide-react';
+import { ArrowLeft, Building, Briefcase, FileDigit, BarChart4, MoveRight, Layers, FileSpreadsheet, Download, PanelRight, X, PlusCircle, ShieldCheck, ChevronDown, Filter, Search, AlertTriangle, AlertCircle } from 'lucide-react';
 import { Tooltip, TooltipTrigger, TooltipContent } from '../components/ui/tooltip';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../components/ui/dialog';
 
@@ -359,43 +359,55 @@ export const Workbench: React.FC = () => {
             {currentRun && !selectedAccountId && filteredRuns.length > 0 && (
                <div className="flex gap-6 w-full shrink-0 pt-2 px-1">
                  <div className="flex-1 bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] relative overflow-hidden flex flex-col justify-between">
-                    <div className="absolute -top-10 right-0 w-64 h-32 bg-blue-500 blur-[80px] opacity-20 rounded-full"></div>
-                    <div className="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mb-6 relative z-10 border border-blue-100/50">
-                      <span className="font-bold">=</span>
-                    </div>
-                    <div className="relative z-10">
-                      <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">
-                        ${(accounts.reduce((sum, a) => sum + (a.transactions.filter(t=>t.isFlagged).reduce((s,t)=>s+t.amount,0)), 0)).toLocaleString(undefined, { maximumFractionDigits: 0 })}
-                      </h2>
-                      <p className="text-slate-500 font-medium text-sm">Total Value Flagged</p>
-                    </div>
-                 </div>
-
-                 <div className="flex-1 bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] relative overflow-hidden flex flex-col justify-between">
-                    <div className="absolute top-0 right-0 w-48 h-32 bg-emerald-400 blur-[80px] opacity-20 rounded-full z-0"></div>
-                     <div className="absolute bottom-0 -left-10 w-48 h-32 bg-cyan-400 blur-[80px] opacity-20 rounded-full z-0"></div>
-                    <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 relative z-10 border border-emerald-100/50">
-                      <Download className="w-4 h-4" />
-                    </div>
-                    <div className="relative z-10">
-                      <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">
-                        {accounts.reduce((sum, a) => sum + a.flaggedCount, 0)}
-                      </h2>
-                      <p className="text-slate-500 font-medium text-sm">Flagged Items</p>
-                    </div>
-                 </div>
-
-                 <div className="flex-1 bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] relative overflow-hidden flex flex-col justify-between">
-                    <div className="absolute -bottom-10 right-0 w-48 h-32 bg-purple-400 blur-[80px] opacity-20 rounded-full"></div>
-                    <div className="absolute -top-10 left-10 w-48 h-32 bg-orange-400 blur-[80px] opacity-20 rounded-full z-0"></div>
+                    <div className="absolute -top-10 left-10 w-48 h-32 bg-indigo-400 blur-[80px] opacity-20 rounded-full z-0"></div>
                     <div className="w-8 h-8 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center mb-6 relative z-10 border border-slate-200">
-                      <ArrowLeft className="w-4 h-4 rotate-90" />
+                      <Layers className="w-4 h-4" />
                     </div>
                     <div className="relative z-10">
                       <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">
                         {accounts.length}
                       </h2>
                       <p className="text-slate-500 font-medium text-sm">Total Accounts</p>
+                    </div>
+                 </div>
+
+                 <div className="flex-1 bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] relative overflow-hidden flex flex-col justify-between">
+                    <div className="absolute -top-10 right-0 w-64 h-32 bg-red-400 blur-[80px] opacity-10 rounded-full"></div>
+                    <div className="w-8 h-8 rounded-full bg-red-50 text-red-600 flex items-center justify-center mb-6 relative z-10 border border-red-100/50">
+                      <AlertTriangle className="w-4 h-4" />
+                    </div>
+                    <div className="relative z-10">
+                      <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">
+                        {accounts.filter(a => a.flaggedCount > 0).length}
+                      </h2>
+                      <p className="text-slate-500 font-medium text-sm">Flagged Accounts</p>
+                    </div>
+                 </div>
+
+                 <div className="flex-1 bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] relative overflow-hidden flex flex-col justify-between">
+                    <div className="absolute top-0 right-0 w-48 h-32 bg-emerald-400 blur-[80px] opacity-20 rounded-full z-0"></div>
+                     <div className="absolute bottom-0 -left-10 w-48 h-32 bg-cyan-400 blur-[80px] opacity-10 rounded-full z-0"></div>
+                    <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mb-6 relative z-10 border border-emerald-100/50">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                    <div className="relative z-10">
+                      <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">
+                        {accounts.filter(a => a.flaggedCount === 0).length}
+                      </h2>
+                      <p className="text-slate-500 font-medium text-sm">Passed Accounts</p>
+                    </div>
+                 </div>
+
+                 <div className="flex-1 bg-white rounded-3xl p-5 border border-slate-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] relative overflow-hidden flex flex-col justify-between">
+                    <div className="absolute -bottom-10 right-0 w-48 h-32 bg-amber-400 blur-[80px] opacity-20 rounded-full"></div>
+                    <div className="w-8 h-8 rounded-full bg-amber-50 text-amber-600 flex items-center justify-center mb-6 relative z-10 border border-amber-200/50">
+                      <AlertCircle className="w-4 h-4" />
+                    </div>
+                    <div className="relative z-10">
+                      <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-1">
+                        {currentRun.metrics.overrides || 0}
+                      </h2>
+                      <p className="text-slate-500 font-medium text-sm">Warnings <span className="text-[11px] font-normal opacity-70 ml-1">(No Rules Applied)</span></p>
                     </div>
                  </div>
                </div>
@@ -780,53 +792,47 @@ export const Workbench: React.FC = () => {
                             <thead className="bg-white text-[12px] font-medium text-slate-500 capitalize tracking-wide border-b border-slate-100 sticky top-[69px] z-10">
                               <tr>
                                 <th className="px-5 py-4 w-10"><input type="checkbox" className="rounded border-slate-300 w-4 h-4 accent-indigo-600 focus:ring-indigo-500 cursor-pointer" /></th>
-                                <th className="px-3 py-4 font-medium">Due date</th>
-                                <th className="px-3 py-4 font-medium">To/From</th>
-                                <th className="px-3 py-4 font-medium">Status</th>
-                                <th className="px-3 py-4 text-right font-medium">Amount</th>
+                                <th className="px-3 py-4 font-medium">Date</th>
+                                <th className="px-3 py-4 font-medium">Account Code</th>
+                                <th className="px-3 py-4 font-medium">Account Type</th>
                                 <th className="px-3 py-4 font-medium">Account</th>
-                                <th className="px-3 py-4 font-medium">Method</th>
-                                <th className="px-3 py-4 font-medium">GL Code</th>
-                                <th className="px-5 py-4 text-center font-medium">Attachment</th>
+                                <th className="px-3 py-4 font-medium">Source</th>
+                                <th className="px-3 py-4 font-medium">Description</th>
+                                <th className="px-3 py-4 font-medium">Reference</th>
+                                <th className="px-3 py-4 text-right font-medium">Debit</th>
+                                <th className="px-3 py-4 text-right font-medium">Credit</th>
                               </tr>
                             </thead>
                             <tbody className="bg-white text-sm divide-y divide-slate-50">
                               {filteredTransactions.map(tx => (
                                 <tr key={tx.id} className={`hover:bg-slate-50/50 transition-colors ${tx.isFlagged ? 'bg-orange-50/30 hover:bg-orange-50/50' : ''}`}>
                                   <td className="px-5 py-4 align-middle"><input type="checkbox" className="rounded border-slate-300 w-4 h-4 accent-indigo-600 focus:ring-indigo-500 cursor-pointer" /></td>
-                                  <td className="px-3 py-4 whitespace-nowrap text-slate-600 align-middle">Oct 12-2026</td>
-                                  <td className="px-3 py-4 text-slate-900 font-medium align-middle">
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center shrink-0 overflow-hidden">
-                                        <div className="flex flex-wrap w-full h-full p-1 opacity-80 gap-0.5 justify-center content-center"><div className="w-1.5 h-1.5 bg-blue-500 rounded-sm"></div><div className="w-1.5 h-1.5 bg-red-500 rounded-sm"></div><div className="w-1.5 h-1.5 bg-yellow-500 rounded-sm"></div><div className="w-1.5 h-1.5 bg-green-500 rounded-sm"></div></div>
-                                      </div>
-                                      <span className="truncate max-w-[150px]">{tx.description}</span>
-                                    </div>
+                                  <td className="px-3 py-4 whitespace-nowrap text-slate-600 align-middle">
+                                    {new Date(tx.date).toLocaleDateString()}
                                   </td>
-                                  <td className="px-3 py-4 align-middle">
-                                     {tx.isFlagged ? (
-                                       <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-orange-100 text-orange-700">Pending Review</span>
-                                     ) : tx.violatedRules.length > 0 ? (
-                                       <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">Canceled</span>
-                                     ) : (
-                                       <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700">Completed</span>
-                                     )}
+                                  <td className="px-3 py-4 text-slate-600 font-medium align-middle">
+                                    {tx.accountCode}
                                   </td>
-                                  <td className="px-3 py-4 text-right font-medium text-slate-900 align-middle">${tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
-                                  <td className="px-3 py-4 text-slate-600 align-middle whitespace-nowrap">Checking ...{selectedAccount.accountNumber.substring(0,4)}</td>
-                                  <td className="px-3 py-4 text-slate-500 align-middle whitespace-nowrap flex items-center gap-1.5">
-                                    <FileDigit className="w-3.5 h-3.5 opacity-60" /> Wire {selectedAccount.accountNumber.substring(0,4)} {tx.reference ? tx.reference.replace(/./g, '*') : '******'}
+                                  <td className="px-3 py-4 text-slate-600 align-middle">
+                                    {tx.accountType}
                                   </td>
-                                  <td className="px-3 py-4 align-middle">
-                                     <div className="flex items-center justify-between border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-slate-700 w-32 cursor-pointer shadow-sm hover:border-slate-300">
-                                       <span>{selectedAccount.accountNumber}</span>
-                                       <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-                                     </div>
+                                  <td className="px-3 py-4 text-slate-600 align-middle">
+                                    {tx.account}
                                   </td>
-                                  <td className="px-5 py-4 text-center align-middle">
-                                     <button className="w-7 h-7 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto hover:bg-slate-200 transition-colors">
-                                       <span className="text-sm font-bold leading-none">+</span>
-                                     </button>
+                                  <td className="px-3 py-4 text-slate-600 align-middle">
+                                    {tx.source}
+                                  </td>
+                                  <td className="px-3 py-4 text-slate-900 font-medium align-middle truncate max-w-[150px]">
+                                    {tx.description}
+                                  </td>
+                                  <td className="px-3 py-4 text-slate-500 align-middle">
+                                    {tx.reference}
+                                  </td>
+                                  <td className="px-3 py-4 text-right text-slate-900 font-medium align-middle">
+                                    {tx.debit !== null ? `$${tx.debit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
+                                  </td>
+                                  <td className="px-3 py-4 text-right text-slate-900 font-medium align-middle">
+                                    {tx.credit !== null ? `$${tx.credit.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-'}
                                   </td>
                                 </tr>
                               ))}
